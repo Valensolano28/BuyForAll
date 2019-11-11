@@ -1,5 +1,11 @@
 package com.example.myapplication;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,18 +15,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
+import org.altbeacon.beacon.Identifier;
+import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,10 +43,12 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     private static final String ACCESS_FINE_LOCATION = "2";
+    private static final int NOTI_ID = 999;
     private BeaconManager beaconManager;
     private List<Beacon> beaconList = new ArrayList<>();
     private TextView textView;
-    private Button button;
+    private final int Int_Major = 10010;
+    private final int Int_Minor = 54488;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -43,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         setContentView(R.layout.activity_main);
 
         textView = findViewById(R.id.textView);
-        button = findViewById(R.id.button);
 
         ActivityCompat.requestPermissions(this,
                 new String[]{ACCESS_FINE_LOCATION,
@@ -53,39 +66,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         beaconManager.bind(this);
         handler.sendEmptyMessage(0);
-
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View v) {
-                try {
-                    beaconManager.stopRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
-                    Log.e("beaconManager","stopRangingBeacons");
-                } catch (RemoteException e) {
-                    Log.e("beaconManager","" + e);
-                    e.printStackTrace();
-                }
-                Beacon beacon = new Beacon.Builder()
-                        .setId1("fda50693-a4e2-4fb1-afcf-c6eb07647825")
-                        .setId2("1")
-                        .setId3("2")
-                        .setManufacturer(0x0118)
-                        .setTxPower(-59)
-                        .setDataFields(Arrays.asList(new Long[] {0l}))
-                        .build();
-                BeaconParser beaconParser = new BeaconParser()
-                        .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
-                BeaconTransmitter beaconTransmitter = new BeaconTransmitter(getApplicationContext(), beaconParser);
-                beaconTransmitter.startAdvertising(beacon);
-
-            }
-        });
-
     }
-
-
-
 
     @Override
     protected void onDestroy() {
@@ -94,38 +75,79 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        beaconManager.bind(this);
+    }
+
+    @Override
     public void onBeaconServiceConnect() {
         try {
             beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        } catch (RemoteException e) { e.printStackTrace(); }
+
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                beaconList.clear();
-                beaconList = (List)beacons;
+                if (beacons.size() > 0) {
+                    beaconList.clear();
+                    beaconList = (List) beacons;
+
+                    Log.e("beaconList", beacons.toString());
+                } else
+                    Log.e("No_beaconList", beacons.toString());
             }
         });
     }
 
-    Handler handler = new Handler() {
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    Handler find_beacon = new Handler() {
         public void handleMessage(Message msg) {
-               for(Beacon beacon : beaconList){
-                   if(beaconList.size() == 0){
-                       textView.setText("");
-                   }else {
-                       Log.e("beacon", "TypeCode" + beacon.getBeaconTypeCode() + " " + beacon.getManufacturer());
-                       String beaconinfo = "Name:" + beacon.getBluetoothName() + "\nRSSI:" + beacon.getRssi() + "\nUUID:" + beacon.getId1() + " \nMajor:" + beacon.getId2() +
-                               "\nMinor:" + beacon.getId3() + " \nDistance:" + String.format("%.3f", beacon.getDistance());
-                       textView.setText(beaconinfo);
-                   }
-               }
-            handler.sendEmptyMessageDelayed(0, 1000);
+            Log.e("findBeaconThread", "비콘 들어옴");
+            try {
+                beaconManager.stopRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
+                beaconManager.unbind(MainActivity.this);
+            } catch (RemoteException e) { e.printStackTrace(); }
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+            startActivity(intent);
         }
     };
+
+        Handler handler = new Handler() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            public void handleMessage(Message msg) {
+                for (Beacon beacon : beaconList) {
+                    String NAME = "Name:" + beacon.getBluetoothName();
+                    String RSSI = "\nRSSI:" + beacon.getRssi();
+                    String UUID = "\nUUID:" + beacon.getId1();
+                    String Major = "\nMajor:" + beacon.getId2();
+                    String Minor = "\nMinor:" + beacon.getId3();
+                    String Distance = "\nDistance:" + String.format("%.3f", beacon.getDistance());
+                    String temp_major = Major.split(":")[1];
+                    String temp_minor = Minor.split(":")[1];
+
+                    if (Int_Major == Integer.parseInt(temp_major) && Int_Minor == Integer.parseInt(temp_minor)) {
+                        Log.e("beacon", "TypeCode" + beacon.getBeaconTypeCode() + " " + beacon.getManufacturer());
+                        String beaconinfo = NAME + RSSI + UUID + Major + Minor + Distance;
+
+                        if (beacon.getDistance() < 1) {
+                            Log.e("beacon", "비콘 들어옴");
+                            Toast.makeText(MainActivity.this, "비콘 들어옴(" + beacon.getBluetoothName() + ")", Toast.LENGTH_SHORT).show();
+                            beaconinfo += "\n비콘들어옴" + beacon.getBluetoothName();
+                            find_beacon.sendEmptyMessage(1);
+                            beaconManager.unbind(MainActivity.this);
+                        } else
+                            Toast.makeText(MainActivity.this, "비콘 찾음(" + beacon.getBluetoothName() + ")", Toast.LENGTH_SHORT).show();
+
+                        textView.setText(beaconinfo);
+                    }
+                    beaconList.clear();
+                }
+                handler.sendEmptyMessageDelayed(0, 1000);
+            }
+        };
 }
+
+
 
 
 
