@@ -1,10 +1,5 @@
 package com.example.myapplication;
 
-
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.AdvertiseCallback;
-import android.bluetooth.le.AdvertiseSettings;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
