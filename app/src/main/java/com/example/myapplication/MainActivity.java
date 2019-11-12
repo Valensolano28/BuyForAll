@@ -64,11 +64,9 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         onbutton = findViewById(R.id.onbutton);
         offbutton = findViewById(R.id.offbutton);
 
-        arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,list);
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(arrayAdapter);
-        ActivityCompat.requestPermissions(this,
-                new String[]{ACCESS_FINE_LOCATION,
-                        ACCESS_COARSE_LOCATION}, 2);
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, 2);
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
@@ -103,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                 }
             }
         });
-
     }
 
     @Override
@@ -152,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     }
 
     public void dialog(String msg) {
-
         String g_url = "http://www.google.com";
         String d_url = "http://www.daum.net";
         String n_url = "http://www.naver.com";
@@ -177,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         builder.setNegativeButton("아니오",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(),"아니오를 선택했습니다.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"아니오",Toast.LENGTH_LONG).show();
                     }
                 });
         builder.show();
@@ -189,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                 String beaconinfo;
                 String temp_beaconinfo ="";
                 if(beaconList.size() > 0){
-
                     textView.setText("");
                     for (int i = 0; i < beaconList.size(); i++) {
                         Beacon beacon = beaconList.get(i);
@@ -202,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                         String temp_major = Major.split(":")[1];
                         String temp_minor = Minor.split(":")[1];
                         beaconinfo = NAME + RSSI + UUID + Major + Minor + Distance;
-
                         if (Int_Major1 == Integer.parseInt(temp_major) && Int_Minor1 == Integer.parseInt(temp_minor)) {
                             list.add(g_ad);
                             if (beacon.getDistance() <= 1) {
@@ -212,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                                 //beaconinfo += "\n비콘들어옴" + beacon.getBluetoothName();
                                 //find_beacon.sendEmptyMessage(1);
                             }
-
                         }else if(Int_Major2 == Integer.parseInt(temp_major) && Int_Minor2 == Integer.parseInt(temp_minor)) {
                             list.add(d_ad);
                         }else{
