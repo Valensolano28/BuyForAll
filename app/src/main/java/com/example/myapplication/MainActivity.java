@@ -43,7 +43,6 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     private static final String ACCESS_FINE_LOCATION = "2";
-    private static final int NOTI_ID = 999;
     private BeaconManager beaconManager;
     private List<Beacon> beaconList = new ArrayList<>();
     private TextView textView;
