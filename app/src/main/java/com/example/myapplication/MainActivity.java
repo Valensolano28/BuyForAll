@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     private TextView textView;
     private final int Int_Major = 10010;
     private final int Int_Minor = 54488;
+    private final Region region = new Region("myRangingUniqueId", null, null, null);
+    private int count = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     @Override
     public void onBeaconServiceConnect() {
         try {
-            beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
+            beaconManager.startRangingBeaconsInRegion(region);
         } catch (RemoteException e) { e.printStackTrace(); }
 
         beaconManager.setRangeNotifier(new RangeNotifier() {
@@ -101,11 +103,11 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
     Handler find_beacon = new Handler() {
         public void handleMessage(Message msg) {
-            Log.e("findBeaconThread", "비콘 들어옴");
             try {
-                beaconManager.stopRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
+                beaconManager.stopRangingBeaconsInRegion(region);
                 beaconManager.unbind(MainActivity.this);
             } catch (RemoteException e) { e.printStackTrace(); }
+            Log.e("handle", "startActivity");
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
             startActivity(intent);
         }
@@ -120,21 +122,20 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                     String UUID = "\nUUID:" + beacon.getId1();
                     String Major = "\nMajor:" + beacon.getId2();
                     String Minor = "\nMinor:" + beacon.getId3();
-                    String Distance = "\nDistance:" + String.format("%.3f", beacon.getDistance());
+                    String Distance = "\nDistance:" + String.format("%.3f", beacon.getDistance()) + "m";
                     String temp_major = Major.split(":")[1];
                     String temp_minor = Minor.split(":")[1];
-
                     if (Int_Major == Integer.parseInt(temp_major) && Int_Minor == Integer.parseInt(temp_minor)) {
-                        Log.e("beacon", "TypeCode" + beacon.getBeaconTypeCode() + " " + beacon.getManufacturer());
+                        //Log.i("beacon", "TypeCode" + beacon.getBeaconTypeCode() + " " + beacon.getManufacturer());
                         String beaconinfo = NAME + RSSI + UUID + Major + Minor + Distance;
-                        if (beacon.getDistance() < 1) {
+                        if (beacon.getDistance() <= 1) {
                             Log.e("beacon", "비콘 들어옴");
-                            Toast.makeText(MainActivity.this, "비콘 들어옴(" + beacon.getBluetoothName() +" "+beacon.getDistance()+ "m)", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "비콘 들어옴(" + beacon.getBluetoothName() +" "+ String.format("%.3f", beacon.getDistance()) + "m)", Toast.LENGTH_SHORT).show();
                             beaconinfo += "\n비콘들어옴" + beacon.getBluetoothName();
                             find_beacon.sendEmptyMessage(1);
-                            beaconManager.unbind(MainActivity.this);
+                            onStop();
                         } else
-                            Toast.makeText(MainActivity.this, "비콘 찾음(" + beacon.getBluetoothName() + ")", Toast.LENGTH_SHORT).show();
+                            Log.i("beacon","비콘 찾음(" + beacon.getBluetoothName() + ")");
                         textView.setText(beaconinfo);
                     }
                     beaconList.clear();
@@ -143,8 +144,3 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             }
         };
 }
-
-
-
-
-
