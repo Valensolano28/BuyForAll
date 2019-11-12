@@ -68,13 +68,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        beaconManager.unbind(this);
-        finish();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         beaconManager.bind(this);
@@ -85,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         super.onStop();
         try {
             beaconManager.stopRangingBeaconsInRegion(region);
-            beaconManager.stopMonitoringBeaconsInRegion(region);
         } catch (RemoteException e) { e.printStackTrace(); }
         beaconManager.unbind(this);
     }
