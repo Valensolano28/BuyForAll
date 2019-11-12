@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     private final int Int_Major = 10010;
     private final int Int_Minor = 54488;
     private final Region region = new Region("myRangingUniqueId", null, null, null);
-    private int count = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -73,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     protected void onDestroy() {
         super.onDestroy();
         beaconManager.unbind(this);
+        onStop();
     }
 
     @Override
@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                             Toast.makeText(MainActivity.this, "비콘 들어옴(" + beacon.getBluetoothName() +" "+ String.format("%.3f", beacon.getDistance()) + "m)", Toast.LENGTH_SHORT).show();
                             beaconinfo += "\n비콘들어옴" + beacon.getBluetoothName();
                             find_beacon.sendEmptyMessage(1);
-                            onStop();
                         } else
                             Log.i("beacon","비콘 찾음(" + beacon.getBluetoothName() + ")");
                         textView.setText(beaconinfo);
