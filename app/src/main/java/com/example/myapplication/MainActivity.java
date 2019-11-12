@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                         String UUID = "\nUUID:" + beacon.getId1();
                         String Major = "\nMajor:" + beacon.getId2();
                         String Minor = "\nMinor:" + beacon.getId3();
-                        String Distance = "\nDistance:" + String.format("" + "%.3f", beacon.getDistance()) + "m\n ";
+                        String Distance = "\nDistance:" + String.format("" + "%.3f", beacon.getDistance()) + "m\n";
                         String temp_major = Major.split(":")[1];
                         String temp_minor = Minor.split(":")[1];
                         beaconinfo = NAME + RSSI + UUID + Major + Minor + Distance;
