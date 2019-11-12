@@ -65,20 +65,29 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         beaconManager.bind(this);
-        handler.sendEmptyMessage(0);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         beaconManager.unbind(this);
-        onStop();
+        finish();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         beaconManager.bind(this);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        try {
+            beaconManager.stopRangingBeaconsInRegion(region);
+            beaconManager.stopMonitoringBeaconsInRegion(region);
+        } catch (RemoteException e) { e.printStackTrace(); }
+        beaconManager.unbind(this);
     }
 
     @Override
@@ -95,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                     beaconList = (List) beacons;
 
                     Log.e("beaconList", beacons.toString());
+                    handler.sendEmptyMessage(0);
                 } else
                     Log.e("No_beaconList", beacons.toString());
             }
@@ -110,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             Log.e("handle", "startActivity");
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
             startActivity(intent);
+            onStop();
         }
     };
 
@@ -139,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                     }
                     beaconList.clear();
                 }
-                handler.sendEmptyMessageDelayed(0, 1000);
+               // handler.sendEmptyMessageDelayed(0, 1000);
             }
         };
 }
