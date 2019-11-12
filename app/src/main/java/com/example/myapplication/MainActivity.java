@@ -128,16 +128,14 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                     if (Int_Major == Integer.parseInt(temp_major) && Int_Minor == Integer.parseInt(temp_minor)) {
                         Log.e("beacon", "TypeCode" + beacon.getBeaconTypeCode() + " " + beacon.getManufacturer());
                         String beaconinfo = NAME + RSSI + UUID + Major + Minor + Distance;
-
                         if (beacon.getDistance() < 1) {
                             Log.e("beacon", "비콘 들어옴");
-                            Toast.makeText(MainActivity.this, "비콘 들어옴(" + beacon.getBluetoothName() + ")", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "비콘 들어옴(" + beacon.getBluetoothName() +" "+beacon.getDistance()+ "m)", Toast.LENGTH_SHORT).show();
                             beaconinfo += "\n비콘들어옴" + beacon.getBluetoothName();
                             find_beacon.sendEmptyMessage(1);
                             beaconManager.unbind(MainActivity.this);
                         } else
                             Toast.makeText(MainActivity.this, "비콘 찾음(" + beacon.getBluetoothName() + ")", Toast.LENGTH_SHORT).show();
-
                         textView.setText(beaconinfo);
                     }
                     beaconList.clear();
