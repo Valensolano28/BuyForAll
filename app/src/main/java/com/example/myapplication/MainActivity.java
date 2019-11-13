@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     private BeaconManager beaconManager;
     private List<Beacon> beaconList = new ArrayList<>();
     private TextView textView;
+    private final String set_UUID = "fda50693-a4e2-4fb1-afcf-c6eb07647825";
     private final int Int_Major1 = 10010;
     private final int Int_Minor1 = 54488;
     private final int Int_Major2 = 10004;
@@ -51,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     private Button offbutton;
     private List<String> list = new ArrayList();
     private final Region region = new Region("myRangingUniqueId", null, null, null);
-    private String g_ad = "google 광고";
-    private String d_ad = "daum 광고";
+    private String g_ad = "google beacon";
+    private String d_ad = "daum beacon";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -75,16 +76,21 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             @Override
             public void onClick(View v) {
                 beaconManager.bind(MainActivity.this);
+                Toast.makeText(getApplicationContext(),"beacon스캔시작",Toast.LENGTH_LONG).show();
             }
         });
         offbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                list.clear();
+                arrayAdapter.notifyDataSetChanged();
+                textView.setText("");
                 try {
                     beaconManager.stopMonitoringBeaconsInRegion(region);
                     beaconManager.stopRangingBeaconsInRegion(region);
                 } catch (RemoteException e) { e.printStackTrace(); }
                 beaconManager.unbind(MainActivity.this);
+                Toast.makeText(getApplicationContext(),"beacon스캔중지",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -162,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle(msg);
-        builder.setMessage(msg + " 연결?");
+        builder.setMessage(msg + " 연결 하시겠습니까?");
         builder.setPositiveButton("예",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -194,24 +200,29 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                         String Major = "\nMajor:" + beacon.getId2();
                         String Minor = "\nMinor:" + beacon.getId3();
                         String Distance = "\nDistance:" + String.format("" + "%.3f", beacon.getDistance()) + "m\n";
+                        String temp_UUID = UUID.split(":")[1];
                         String temp_major = Major.split(":")[1];
                         String temp_minor = Minor.split(":")[1];
                         beaconinfo = NAME + RSSI + UUID + Major + Minor + Distance;
-                        if (Int_Major1 == Integer.parseInt(temp_major) && Int_Minor1 == Integer.parseInt(temp_minor)) {
-                            list.add(g_ad);
-                            if (beacon.getDistance() <= 1) {
-                                //거리 1m이하일때
-                                //Log.e("beacon", "비콘 1m안에 들어옴");
-                                //Toast.makeText(MainActivity.this, "비콘 들어옴(" + beacon.getBluetoothName() +" "+ String.format("%.3f", beacon.getDistance()) + "m)", Toast.LENGTH_SHORT).show();
-                                //beaconinfo += "\n비콘들어옴" + beacon.getBluetoothName();
-                                //find_beacon.sendEmptyMessage(1);
+                        if(temp_UUID.equals(set_UUID)) {
+                            if (Int_Major1 == Integer.parseInt(temp_major) && Int_Minor1 == Integer.parseInt(temp_minor)) {
+                                list.add(g_ad);
+                                if (beacon.getDistance() <= 1) {
+                                    //거리 1m이하일때
+                                    //Log.e("beacon", "비콘 1m안에 들어옴");
+                                    //Toast.makeText(MainActivity.this, "비콘 들어옴(" + beacon.getBluetoothName() +" "+ String.format("%.3f", beacon.getDistance()) + "m)", Toast.LENGTH_SHORT).show();
+                                    //beaconinfo += "\n비콘들어옴" + beacon.getBluetoothName();
+                                    //find_beacon.sendEmptyMessage(1);
+                                }
+                            } else if (Int_Major2 == Integer.parseInt(temp_major) && Int_Minor2 == Integer.parseInt(temp_minor)) {
+                                list.add(d_ad);
+                            } else {
+                                list.add(beacon.getBluetoothName());
                             }
-                        }else if(Int_Major2 == Integer.parseInt(temp_major) && Int_Minor2 == Integer.parseInt(temp_minor)) {
-                            list.add(d_ad);
-                        }else{
+                        }else {
                             list.add(beacon.getBluetoothName());
                         }
-                        Log.i("beacon", "ListAdd "+ NAME + " " + temp_major +" " + temp_minor);
+                        Log.i("beacon", "ListAdd "+ NAME + " " + temp_major +" " + temp_minor + " " + temp_UUID);
                         temp_beaconinfo += beaconinfo;
                     }
                     textView.append(temp_beaconinfo);
