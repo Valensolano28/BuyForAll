@@ -29,7 +29,6 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             public void onClick(View v) {
                 list.clear();
                 arrayAdapter.notifyDataSetChanged();
-                textView.setText("");
+                textView.setText("info...");
                 try {
                     beaconManager.stopMonitoringBeaconsInRegion(region);
                     beaconManager.stopRangingBeaconsInRegion(region);
@@ -159,12 +158,13 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         String d_url = "http://www.daum.net";
         String n_url = "http://www.naver.com";
         final String url;
-        if(msg.equals(g_ad)){
-           url = g_url;
-        }else if(msg.equals(d_ad))
+        if (msg.equals(g_ad)) {
+            url = g_url;
+        }else if (msg.equals(d_ad)){
             url = d_url;
-        else
+        }else{
             url = n_url;
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle(msg);
@@ -212,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                                     //Log.e("beacon", "비콘 1m안에 들어옴");
                                     //Toast.makeText(MainActivity.this, "비콘 들어옴(" + beacon.getBluetoothName() +" "+ String.format("%.3f", beacon.getDistance()) + "m)", Toast.LENGTH_SHORT).show();
                                     //beaconinfo += "\n비콘들어옴" + beacon.getBluetoothName();
-                                    //find_beacon.sendEmptyMessage(1);
                                 }
                             } else if (Int_Major2 == Integer.parseInt(temp_major) && Int_Minor2 == Integer.parseInt(temp_minor)) {
                                 list.add(d_ad);
@@ -227,8 +226,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                     }
                     textView.append(temp_beaconinfo);
                     beaconList.clear();
+                }
             }
-            }
-
         };
 }
