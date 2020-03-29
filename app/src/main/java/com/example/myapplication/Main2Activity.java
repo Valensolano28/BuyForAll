@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,10 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
-
 import android.widget.Toast;
-import android.media.MediaPlayer;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,11 +31,9 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
@@ -212,6 +209,41 @@ public class Main2Activity extends AppCompatActivity implements BeaconConsumer {
     }
 
 
+    Runnable r = new Runnable() {
+        public void run() {
+            Intent intent = getIntent();
+            Bundle extras = intent.getExtras();
+            String audio = extras.getString("AUDIO");
+            String audioreproducir = audio;
+            Log.i("beacons", "EL AUDIO DEL PASILLO YA FUE REPRODUCIDO" + audio);
+            MediaPlayer mp;
+            mp = MediaPlayer.create(getApplicationContext(), getResources().getIdentifier(audioreproducir, "raw", getPackageName()));
+            mp.start();
+            a = a + 1;
+        }
+    };
+    Runnable r1 = new Runnable() {
+        public void run() {
+            Intent intent = getIntent();
+            Bundle extras = intent.getExtras();
+            String audio = extras.getString("PRODUCTO");
+            String audioreproducir = audio;
+            Log.i("beacons", "EL AUDIO DEL PRODUCTO YA FUE REPRODUCIDO" + audio);
+            MediaPlayer mp1;
+            mp1 = MediaPlayer.create(getApplicationContext(), getResources().getIdentifier(audioreproducir, "raw", getPackageName()));
+            mp1.start();
+
+
+            b = b + 1;
+        }
+    };
+    Runnable r2 = new Runnable() {
+        public void run() {
+            MediaPlayer mp2;
+            mp2 = MediaPlayer.create(getApplicationContext(), getResources().getIdentifier("despedida", "raw", getPackageName()));
+            mp2.start();
+        }
+    };
     Handler handler = new Handler() {
             @SuppressLint("HandlerLeak")
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -251,25 +283,26 @@ public class Main2Activity extends AppCompatActivity implements BeaconConsumer {
                         }else {
                             list.add(beacon.getBluetoothName());
                         }
-                        Log.i("beacon", "ListAdd "+ NAME + " " + temp_major +" " + temp_minor + " " + temp_UUID);
+                        Log.i("b", "ListAdd " + NAME + " " + temp_major + " " + temp_minor + " " + temp_UUID);
                         String uuid2=beacon.getId1().toString();
-                        Log.i("uuidreal","El uuid encontrado en la region:"+ uuid2);
+                        Log.i("beacons", "EL UUID ENCONTRADO EN LA REGIÓN POR PROXIMIDAD ES" + uuid2);
 
                         Intent intent = getIntent();
                         Bundle extras = intent.getExtras();
 
                         String uuid = extras.getString("UUID");
                         String comparar=uuid;
-                        Log.i("uuidbasededatos","El uuid de la base de datos:"+ comparar);
+                        Log.i("beacons", "EL UUID TRAIDO DE LA BASE DE DATOS DEL PASILLO ES" + comparar);
 
                         String uuid1 = extras.getString("UUIDPRODUCTO");
                         String comparar1=uuid1;
-                        Log.i("productouuidbasededatos","El uuid de la base de datos:"+ comparar1);
+                        Log.i("beacons", "EL UUID TRAIDO DE LA BASE DE DATOS DEL PRODUCTO ES" + comparar1);
 
 
                         //SI SE ENCUENTRA DENTRO DEL PASILLO Y SE ENCUENTRA EL PRODUCTO
                         if ((b==0)&&(uuid2.equals(comparar1))){
                             handler.postDelayed(r1, 1000);
+                            handler.postDelayed(r2, 7000);
                             if (beacon.getDistance() >= 0.6) {
                                 b=0;}
                         }
@@ -288,34 +321,6 @@ public class Main2Activity extends AppCompatActivity implements BeaconConsumer {
                 }
             }
         };
-
-
-    Runnable r=new Runnable() {
-        public void run() {
-            Intent intent = getIntent();
-            Bundle extras = intent.getExtras();
-            String audio= extras.getString("AUDIO");
-            String audioreproducir=audio;
-            Log.i("audio","audio es:"+ audio);
-            MediaPlayer mp;
-            mp=MediaPlayer.create(getApplicationContext(), getResources().getIdentifier(audioreproducir,"raw",getPackageName()));
-            mp.start();
-            a=a+1;
-        }
-    };
-    Runnable r1=new Runnable() {
-        public void run() {
-            Intent intent = getIntent();
-            Bundle extras = intent.getExtras();
-            String audio= extras.getString("PRODUCTO");
-            String audioreproducir=audio;
-            Log.i("audio","audio es:"+ audio);
-            MediaPlayer mp1;
-             mp1=MediaPlayer.create(getApplicationContext(), getResources().getIdentifier(audioreproducir,"raw",getPackageName()));
-             mp1.start();
-             b=b+1;
-        }
-    };
 
 
 }

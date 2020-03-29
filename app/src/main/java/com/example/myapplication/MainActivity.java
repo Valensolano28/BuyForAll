@@ -3,7 +3,6 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -17,12 +16,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        usr = (EditText) findViewById(R.id.username);
-        pas = (EditText) findViewById(R.id.password);
-        ip="192.168.0.13";
-       // MediaPlayer mp;
-       // mp=MediaPlayer.create(getApplicationContext(), getResources().getIdentifier("intro","raw",getPackageName()));
-       // mp.start();
+        usr = findViewById(R.id.username);
+        pas = findViewById(R.id.password);
+        ip = "192.168.0.21";
+        MediaPlayer mp;
+        mp = MediaPlayer.create(getApplicationContext(), getResources().getIdentifier("bienvenida", "raw", getPackageName()));
+        mp.start();
     }
 
     public void loginBtn(View view) {

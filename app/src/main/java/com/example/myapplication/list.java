@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +9,10 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -26,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -42,9 +42,9 @@ public class list extends AppCompatActivity {
         setContentView(R.layout.list);
         result = findViewById(R.id.result);
         button = findViewById(R.id.button);
-             //  MediaPlayer mp1;
-             //  mp1=MediaPlayer.create(getApplicationContext(), getResources().getIdentifier("lista","raw",getPackageName()));
-             //  mp1.start();
+        MediaPlayer mp1;
+        mp1 = MediaPlayer.create(getApplicationContext(), getResources().getIdentifier("lista", "raw", getPackageName()));
+        mp1.start();
 
         button.setOnClickListener(new DoubleClickListener() {
             @Override
@@ -96,7 +96,11 @@ public class list extends AppCompatActivity {
                 ArrayList<String> resultString = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 result.setText(resultString.get(0));
                 resultado=resultString.get(0);
-                Log.i("pasillo", "... "+ resultado); //Se imprime el UUID respuesta de la base de datos
+                Log.i("lista", "NOMBRE DEL PASILLO A CONSULTAR EN LA BASE DE DATOS... " + resultado); //Se imprime el UUID respuesta de la base de datos
+
+                MediaPlayer mp1;
+                mp1 = MediaPlayer.create(getApplicationContext(), getResources().getIdentifier("pasoabeacon", "raw", getPackageName()));
+                mp1.start();
             }
         }
     }
@@ -104,19 +108,20 @@ public class list extends AppCompatActivity {
 
         background2 bg = new background2(this);
         String uuid=bg.execute(resultado).get();
-        Log.i("consultainicial", "... "+ uuid); //Se imprime el UUID respuesta de la base de datos
+        Log.i("lista", "UUID DEL PASILLO ENCONTRADO..." + uuid); //Se imprime el UUID respuesta de la base de datos
 
         background3 bg1=new background3(this);
         String audio=bg1.execute(resultado).get();
-        Log.i("consultainicial", "... "+ audio); //Se imprime el Audio del Pasillo de la base de datos
+        Log.i("lista", "NOMBRE DEL AUDIO DEL PASILLO ENCONTRADO..." + audio); //Se imprime el Audio del Pasillo de la base de datos
 
         background4 bg2=new background4(this);
         String producto=bg2.execute(resultado).get();
-        Log.i("consultainicial", "... "+ producto); //Se imprime el Audio del producto de la base de datos
+        Log.i("lista", "NOMBRE DEL AUDIO DEL PRODUCTO ENCONTRADO..." + producto); //Se imprime el Audio del producto de la base de datos
 
         background5 bg3=new background5(this);
         String uuidproducto=bg3.execute(resultado).get();
-        Log.i("consultainicial", "... "+ uuidproducto); //Se imprime el uuid del producto de la base de datos
+        Log.i("lista", "UUID DEL PRODUCTO ENCONTRADO..." + uuidproducto); //Se imprime el uuid del producto de la base de datos
+
 
         Intent i = new Intent(this,Main2Activity.class);
         Bundle extras = new Bundle();
@@ -165,7 +170,7 @@ public class list extends AppCompatActivity {
                 http.setDoInput(true);
                 http.setDoOutput(true);
                 OutputStream ops = http.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops,"UTF-8"));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops, StandardCharsets.UTF_8));
 
                 //Se envia el dato del pasillo obtenido del comando de voz obtenido de la aplicación
                 String data = URLEncoder.encode("pasillo","UTF-8")+"="+ URLEncoder.encode(pasillo,"UTF-8");
@@ -176,7 +181,7 @@ public class list extends AppCompatActivity {
                 writer.close();
                 ops.close();
                 InputStream ips = http.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(ips,"ISO-8859-1"));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(ips, StandardCharsets.ISO_8859_1));
 
 
                 //Variable para recibir respuesta de la base de datos
@@ -241,7 +246,7 @@ public class list extends AppCompatActivity {
                 http.setDoInput(true);
                 http.setDoOutput(true);
                 OutputStream ops = http.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops,"UTF-8"));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops, StandardCharsets.UTF_8));
 
                 //Se envia el dato del pasillo obtenido del comando de voz obtenido de la aplicación
                 String data = URLEncoder.encode("pasillo","UTF-8")+"="+ URLEncoder.encode(pasillo,"UTF-8");
@@ -252,7 +257,7 @@ public class list extends AppCompatActivity {
                 writer.close();
                 ops.close();
                 InputStream ips = http.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(ips,"ISO-8859-1"));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(ips, StandardCharsets.ISO_8859_1));
 
                 //Variable para recibir respuesta de la base de datos
                 String line ="";
@@ -315,7 +320,7 @@ public class list extends AppCompatActivity {
                 http.setDoInput(true);
                 http.setDoOutput(true);
                 OutputStream ops = http.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops,"UTF-8"));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops, StandardCharsets.UTF_8));
 
                 //Se envia el dato del pasillo obtenido del comando de voz obtenido de la aplicación
                 String data = URLEncoder.encode("pasillo","UTF-8")+"="+ URLEncoder.encode(pasillo,"UTF-8");
@@ -326,7 +331,7 @@ public class list extends AppCompatActivity {
                 writer.close();
                 ops.close();
                 InputStream ips = http.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(ips,"ISO-8859-1"));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(ips, StandardCharsets.ISO_8859_1));
 
                 //Variable para recibir respuesta de la base de datos
                 String line ="";
@@ -388,7 +393,7 @@ public class list extends AppCompatActivity {
                 http.setDoInput(true);
                 http.setDoOutput(true);
                 OutputStream ops = http.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops,"UTF-8"));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops, StandardCharsets.UTF_8));
 
                 //Se envia el dato del pasillo obtenido del comando de voz obtenido de la aplicación
                 String data = URLEncoder.encode("pasillo","UTF-8")+"="+ URLEncoder.encode(pasillo,"UTF-8");
@@ -399,7 +404,7 @@ public class list extends AppCompatActivity {
                 writer.close();
                 ops.close();
                 InputStream ips = http.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(ips,"ISO-8859-1"));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(ips, StandardCharsets.ISO_8859_1));
 
                 //Variable para recibir respuesta de la base de datos
                 String line ="";

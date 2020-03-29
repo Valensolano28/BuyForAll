@@ -17,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 //CLASE PARA CONECTAR A LA INTERFAZ DE LOGIN CON LA BASE DE DATOS
 
 public class background extends AsyncTask<String, Void, String> {
@@ -53,7 +54,7 @@ public class background extends AsyncTask<String, Void, String> {
         String result = "";
         String user = voids[0];
         String pass = voids[1];
-        String ip="192.168.0.13";
+        String ip = "192.168.0.21";
         String connstr = "http://"+ip+":80/login.php";  //Se pone los datos de IP del servidor donde esta corriendo la base de datos local y el PHP
         // El php se encuentra en la carpeta HTDOCS en donde esta instalado Xampp
 
@@ -65,7 +66,7 @@ public class background extends AsyncTask<String, Void, String> {
             http.setDoInput(true);
             http.setDoOutput(true);
             OutputStream ops = http.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops,"UTF-8"));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ops, StandardCharsets.UTF_8));
 
             //Se envian los datos de usuario y contraseña al php
             String data = URLEncoder.encode("user","UTF-8")+"="+ URLEncoder.encode(user,"UTF-8")
@@ -77,7 +78,7 @@ public class background extends AsyncTask<String, Void, String> {
             writer.close();
             ops.close();
             InputStream ips = http.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(ips,"ISO-8859-1"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(ips, StandardCharsets.ISO_8859_1));
 
             //Variable para recibir respuesta de la base de datos
             String line ="";
@@ -94,7 +95,7 @@ public class background extends AsyncTask<String, Void, String> {
 
             //Se lee por consola El resultado enviado por la base de datos
 
-            Log.i("db", "Resultado:"+result);
+            Log.i("inicial", "RESULTADO DE LA BASE DE DATOS:" + result);
 
             //Se retorna el resultado
             return result;
