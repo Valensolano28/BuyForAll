@@ -23,7 +23,8 @@ Documentation on
 * Architecture
 * Coding
 * Hardware <br/>
-is available at:
+
+Is available at:
 (<https://drive.google.com/drive/folders/1FwTxH-gGzUOS9eMTSrKRHbnsVkjrp4D4>)
 
 ## Videos de funcionamiento
