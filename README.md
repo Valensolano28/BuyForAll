@@ -5,15 +5,25 @@ Buy For All es una aplicación que nace primero de la necesidad de brindarle a l
 
 ## Archivos PHP de conexión con la base de datos 
 
-
 Los archivos de conexión con la base de datos y la base de datos se pueden descargar desde el siguiente link:
 (<https://drive.google.com/drive/folders/12urJu-jouXUEZemcaiEEx7XZM6vZOSik?usp=sharing>)
 
 ## Documentación-Documentation
-La documentación sobre instalación, Arquitectura, Codificación y Hardware se encuentra disponible en:
-(<https://drive.google.com/drive/folders/1ll2lKgdVpPhuwafI_ZV0NHPp31ZNYI1H>)
+La documentación sobre
+* Instalación
+* Arquitectura 
+* Codificación 
+* Hardware<br/>
 
-Documentation on Installation, Architecture, Coding and Hardware is available at:
+Se encuentra disponible en:
+(<https://drive.google.com/drive/folders/1ll2lKgdVpPhuwafI_ZV0NHPp31ZNYI1H>)<br/>
+
+Documentation on 
+* Installation
+* Architecture
+* Coding
+* Hardware <br/>
+is available at:
 (<https://drive.google.com/drive/folders/1FwTxH-gGzUOS9eMTSrKRHbnsVkjrp4D4>)
 
 ## Videos de funcionamiento
