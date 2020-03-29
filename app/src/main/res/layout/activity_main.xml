@@ -1,41 +1,113 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/colorPrimary"
+android:orientation="vertical"
+android:focusableInTouchMode="true">
 
-     tools:context=".MainActivity">
+<LinearLayout
+    style="@style/df_row_vertical"
+    android:layout_height="match_parent"
+    android:weightSum="12">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="261dp"
+        android:layout_weight="6"
+        android:background="@color/df_danger"
+        android:gravity="center"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/offbutton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="offButton" />
-
-        <Button
-            android:id="@+id/onbutton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="onButton" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="info..." />
-
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </ListView>
+        <ImageView
+            android:id="@+id/continuar"
+            android:layout_width="152dp"
+            android:layout_height="199dp"
+            android:layout_gravity="center"
+            android:onClick="redirect"
+            app:srcCompat="@drawable/logo" />
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="6"
+        android:gravity="center"
+        android:background="@color/formBg"
+        android:padding="20dp">
 
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/sendOtpLayout"
+            style="@style/df_row_vertical"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="visible">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutUname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Username"
+                    android:inputType="number"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    android:inputType="number"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/loginBtn"
+                android:layout_marginTop="40dp"
+                android:layout_width="match_parent"
+                style="@style/df4_btn_danger"
+                android:layout_gravity="center_vertical"
+                android:text="LOGIN ADMIN"
+                android:onClick="loginBtn"
+                />
+
+            <ProgressBar
+                android:id="@+id/progressSendingOtp"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                android:layout_centerInParent="true"/>
+
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
+</LinearLayout>
+
+
+
+
+
+
+
+

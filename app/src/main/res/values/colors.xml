@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#FCFCFC</color>
+    <color name="colorPrimaryDark">#2A2E43</color>
+    <color name="colorAccent">#FCFCFC</color>
+    <color name="colorAzul">#AED6F6</color>
+
+    <!--colors for light mode-->
+    <color name="contentTextColor">#020000</color>
+    <color name="whiteTextColor">#fff</color>
+
+    <color name="df_red">#505050</color>
+    <color name="df_danger">#505050</color>
+    <color name="formBg">#f0f0f0</color>
+    <color name="black_alpha_75">#bf000000</color>
+    <color name="white">#ffffffff</color>
 </resources>
