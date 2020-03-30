@@ -27,7 +27,7 @@ Documentation on
 Is available at:
 (<https://drive.google.com/drive/folders/1FwTxH-gGzUOS9eMTSrKRHbnsVkjrp4D4>)
 
-## Videos de funcionamiento
+## Video de funcionamiento
 El video de funcionamiento se encuentra disponible en el siguiente link:
-(<https://drive.google.com/drive/folders/1FwTxH-gGzUOS9eMTSrKRHbnsVkjrp4D4>)
+(<https://www.youtube.com/watch?v=mNEnovvtHT8&feature=youtu.be>)
 
